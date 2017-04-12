@@ -14,9 +14,14 @@ describe SessionsController, type: :controller do
       it 'responds with a status of 403' do
         expect(response).to have_http_status(403)
       end
-      it 'responds with a json blob containing an error message' do
+      it 'responds with an error message stating credentials are invalid' do
         expect(response.body).to include("Invalid user name or password.")
       end
+    end
+    it 'when a user is logged in it responds with an error message stating user is currently logged in' do
+      session[:id] = user.id
+      post :create, params: {name: user.name, password: user.password }
+      expect(response.body).to include("You are already logged in. Your session id is set to #{session[:id]}")
     end
   end
 end
