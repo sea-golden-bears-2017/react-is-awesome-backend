@@ -1,11 +1,20 @@
 require 'rails_helper'
+require 'json'
 
 describe SessionsController, type: :controller do
   let(:user) {FactoryGirl.create :user}
   describe '#create' do
-    it 'sets the session id to the id of the user' do
-      post :create, params: {name: user.name, password: user.password }
-      expect(session[:id]).to eq(user.id)
+    context 'on valid params' do
+      before(:each) do
+        post :create, params: {name: user.name, password: user.password }
+      end
+      it 'sets the session id to the id of the user' do
+        expect(session[:id]).to eq(user.id)
+      end
+      it 'responds with the newly set session id' do
+        parsed_response = JSON.parse(response.body)
+        expect(parsed_response["session_id"]).to eq(user.id)
+      end
     end
     context 'on invalid params' do
       before(:each) do
