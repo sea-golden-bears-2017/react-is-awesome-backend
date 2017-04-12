@@ -24,4 +24,15 @@ describe SessionsController, type: :controller do
       expect(response.body).to include("You are already logged in. Your session id is set to #{session[:id]}")
     end
   end
+  describe '#destroy' do
+    before(:each) do
+      delete :destroy, params: {id: user.id}
+    end
+    it 'clears the user id from the session' do
+      expect(session[:id]).to be_nil
+    end
+    it 'responds with a message stating that the user has been logged out' do
+      expect(response.body).to include("You have been successfully logged out")
+    end
+  end
 end

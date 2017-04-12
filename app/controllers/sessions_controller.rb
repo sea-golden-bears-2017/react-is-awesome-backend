@@ -8,8 +8,10 @@ class SessionsController < ApplicationController
       render json: {error: "Invalid user name or password."}.to_json, status: 403
     end
   end
-  
+
   def destroy
+    session.clear
+    render json: {message: "You have been successfully logged out"}
   end
 
   private
