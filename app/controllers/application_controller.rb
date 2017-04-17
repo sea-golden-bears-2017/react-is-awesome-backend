@@ -2,14 +2,18 @@ class UnauthorizedError < StandardError
 end
 
 class ApplicationController < ActionController::API
-  def authorize!
-    if !authorize
+  def authorize!(*args)
+    if !authorize(*args)
       raise UnauthorizedError
     end
   end
 
-  def authorize
-    return params[:user_id] == session[:user_id] && current_user
+  def authorize(admin: false)
+    valid_user = params[:user_id] == session[:user_id] && current_user
+    if valid_user
+      valid_permissions = !admin || current_user.is_admin?
+    end
+    valid_user && valid_permissions
   end
 
   def current_user
