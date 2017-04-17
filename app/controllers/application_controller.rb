@@ -17,7 +17,10 @@ class ApplicationController < ActionController::API
     @current_user ||= User.find(session[:user_id])
   end
 
-  rescue_from UnauthorizedError do |exception|
+  rescue_from UnauthorizedError, with: :unauthorized_error
+
+  private
+  def unauthorized_error
     error = 'Unauthorized access. Please log in and try again'
     render json: {error: error }, status: 403
   end
