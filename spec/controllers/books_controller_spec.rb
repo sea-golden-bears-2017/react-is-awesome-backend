@@ -14,4 +14,16 @@ describe BooksController do
       expect(response.body).to eq(book.to_json)
     end
   end
+  context 'passed a user_id' do
+    let(:user) { FactoryGirl.create :user }
+    before(:each) do
+      user.books << book
+    end
+
+    it 'responds with json containing books for a specific user when a user is logged in' do
+      session[:user_id] = user.id.to_s
+      get :index, params: {user_id: user.id}
+      expect(response.body).to include(book.to_json)
+    end
+  end
 end
