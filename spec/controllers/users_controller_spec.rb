@@ -13,10 +13,15 @@ describe UsersController do
     end
   end
   describe '#update' do
-    it 'updates a user in the database' do
-      name = Faker::Name.name
+    let(:name) {Faker::Name.name}
+    before(:each) do
       put :update, params: {id: user.id, user: {name: name }}
+    end
+    it 'updates a user in the database' do
       expect(user.reload.name).to eq(name)
+    end
+    it 'responds with a json blob containing the newly updated user info' do
+      expect(response.body).to include(name)
     end
   end
 end
