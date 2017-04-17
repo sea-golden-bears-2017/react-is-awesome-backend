@@ -12,10 +12,11 @@ describe UsersController do
       expect(response.body).to include(user_params[:user][:name])
     end
   end
-  describe '#show' do
-    it 'responds with a json blob containing specific user info' do
-      get :show, params: {id: user.id}
-      expect(response.body).to include(user.to_json)
+  describe '#update' do
+    it 'updates a user in the database' do
+      name = Faker::Name.name
+      put :update, params: {id: user.id, user: {name: name }}
+      expect(user.reload.name).to eq(name)
     end
   end
 end
