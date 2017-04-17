@@ -25,5 +25,10 @@ describe BooksController do
       get :index, params: {user_id: user.id}
       expect(response.body).to include(book.to_json)
     end
+
+    it 'responds with a status of 403 when a user is not logged in' do
+      get :index, params: {user_id: user.id}
+      expect(response.status).to eq(403)
+    end
   end
 end
