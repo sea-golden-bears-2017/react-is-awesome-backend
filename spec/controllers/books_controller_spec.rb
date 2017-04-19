@@ -31,4 +31,10 @@ describe BooksController do
       expect(response.status).to eq(403)
     end
   end
+  describe '#search' do
+    context 'with valid parameters' do
+      it 'responds with json containing books with the specified genre'
+      it 'responds with a 200'
+    end
+  end
 end

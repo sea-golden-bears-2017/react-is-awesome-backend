@@ -6,4 +6,5 @@ Rails.application.routes.draw do
     resources :books, except: [:create, :show, :new]
   end
   resources :products, only: :index
+  get '/books/search/:term', to: 'books#search'
 end
