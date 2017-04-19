@@ -8,4 +8,10 @@ describe ProductsController do
       expect(response.body).to include(product.name)
     end
   end
+  describe '#show' do
+    it 'responds with a json blob containing a single product' do
+      get :show, params: {id: product.id}
+      expect(response.body).to include(product.name)
+    end
+  end
 end
