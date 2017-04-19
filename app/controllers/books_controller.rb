@@ -12,4 +12,9 @@ class BooksController < ApplicationController
   def show
     render json: Book.find(params[:id])
   end
+
+  def search
+    # p params
+    render json: Book.where(genre: params[:term])
+  end
 end
