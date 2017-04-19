@@ -33,6 +33,13 @@ ActiveRecord::Schema.define(version: 20170418185512) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "foods", force: :cascade do |t|
+    t.string   "name",       null: false
+    t.string   "unit",       null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "products", force: :cascade do |t|
     t.string   "name"
     t.string   "price"

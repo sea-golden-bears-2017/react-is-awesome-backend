@@ -15,3 +15,11 @@ publisher = Faker::Book.publisher
     publisher: publisher,
     genre: Faker::Book.publisher)
 end
+
+10.times do
+  Food.create(name: Faker::Food.ingredient, unit: Faker::Food.measurement)
+end
+
+10.times do
+  Food.create(name: Faker::Food.spice, unit: Faker::Food.measurement)
+end
