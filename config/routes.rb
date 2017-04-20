@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   resources :books, except: :update
   resources :users do
     resources :books, except: [:create, :show, :new]
+    resources :friends, only: [:index, :create, :destroy]
   end
   resources :products, only: :index
 end

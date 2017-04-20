@@ -87,16 +87,16 @@ describe FoodsController do
         get :destroy, params: { id: food.id }
         expect(response.status).to be(200)
       end
-  
+
       it 'successfully destroys the food item' do
         id = food.id
         get :destroy, params: { id: id }
         expect(Food.find_by(id: id)).to be_nil
       end
 
-      it 'returns a 400 if the id is incorrect' do
+      it 'returns a 404 if the id is incorrect' do
         get :destroy, params: { id: 48924714 }
-        expect(response.status).to be(400)
+        expect(response.status).to be(404)
       end
     end
   end

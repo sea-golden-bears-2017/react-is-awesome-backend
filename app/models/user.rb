@@ -4,4 +4,13 @@ class User < ApplicationRecord
   validates_uniqueness_of :name, case_sensitive: false
   has_many :book_users
   has_many :books, through: :book_users
+
+  def has_friend?(user_id)
+    self.friends.exists?(user_b_id: user_id)
+  end
+
+  def is_friend_of(user_id)
+    user = User.find_by(user_id)
+    user && user.has_friend(self.id)
+  end
 end

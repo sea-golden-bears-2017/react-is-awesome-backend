@@ -4,33 +4,36 @@ module Authorization
 
   def current_user
     return unless session[:user_id]
-    @current_user ||= User.find(session[:user_id])
+    @current_user ||= User.find_by(id: session[:user_id])
   end
 
-  def user_matches_params?
-    current_user && params[:user_id] == session[:user_id]
+  def endpoint_user
+    return unless params[:user_id]
+    endpoint_user ||= User.find_by(id: params[:user_id])
   end
 
-  def require_logged_in
-    if !current_user
+  def require_current_user
+    raise Authorization::UnauthorizedError unless current_user
+  end
+
+  def require_self
+    require_current_user
+    if params[:user_id] && params[:user_id] != session[:user_id]
       raise Authorization::UnauthorizedError
     end
+  end
+
+  def require_admin
+    require_current_user
+    raise Authorization::UnauthorizedError unless current_user.is_admin?
   end
 
   def authorize_if_needed
-    if params[:user_id] && !user_matches_params?
-      raise Authorization::UnauthorizedError
-    end
-  end
-
-  def authorize
-    require_logged_in && user_matches_params?
-  end
-
-  def authorize_admin
-    require_logged_in
-    if !current_user.is_admin?
-      raise Authorization::UnauthorizedError
+    if params[:user_id]
+      require_current_user
+      if params[:user_id] != session[:user_id]
+        raise Authorization::UnauthorizedError unless current_user.is_friend_of?(params[:user_id])
+      end
     end
   end
 end

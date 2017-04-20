@@ -10,12 +10,12 @@ class FoodsController < ApplicationController
     if food
       render json: food
     else
-      render json: { error: "Food id#{params[:id]} not found" }, status: 404
+      render json: { error: "Food id #{params[:id]} not found" }, status: 404
     end
   end
 
   def create
-    authorize_admin
+    require_admin
     food = Food.new(food_params)
 
     if food.save
@@ -26,13 +26,13 @@ class FoodsController < ApplicationController
   end
 
   def destroy
-    authorize_admin
+    require_admin
     food = Food.find_by(id: params[:id])
     if food
       food.destroy
       render json: { status: "destroyed" }
     else
-      render json: { error: "Invalid parameters" }, status: 400
+      render json: { error: "Food not found" }, status: 404
     end
   end
 
