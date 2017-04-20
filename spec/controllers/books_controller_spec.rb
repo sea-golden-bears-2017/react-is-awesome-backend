@@ -43,8 +43,14 @@ describe BooksController do
       end
     end
     context 'with invalid parameters'do
-      it 'responds with a 404'
-      it 'responds with an error message as json'
+      it 'responds with a 404' do
+        get :search, params: {term: 'garbagegarbage'}
+        expect(response.status).to eq(404)
+      end
+      it 'responds with an error message as json' do
+        get :search, params: {term: 'garbagegarbage'}
+        expect(response.body).to include("Books with the genre of garbagegarbage not found")
+      end
     end
   end
 end
