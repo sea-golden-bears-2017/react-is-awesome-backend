@@ -1,6 +1,6 @@
 class BooksController < ApplicationController
   include Authorization
-  before_action :require_login
+  before_action :authorize_if_needed
   def index
     if params[:user_id]
       render json: current_user.books

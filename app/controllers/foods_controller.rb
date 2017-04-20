@@ -1,6 +1,6 @@
 class FoodsController < ApplicationController
   include Authorization
-  before_action :require_login
+  before_action :authorize_if_needed
   def index
     render json: Food.all
   end
@@ -15,7 +15,7 @@ class FoodsController < ApplicationController
   end
 
   def create
-    require_admin
+    authorize_admin
     food = Food.new(food_params)
 
     if food.save
@@ -26,7 +26,7 @@ class FoodsController < ApplicationController
   end
 
   def destroy
-    require_admin
+    authorize_admin
     food = Food.find_by(id: params[:id])
     if food
       food.destroy

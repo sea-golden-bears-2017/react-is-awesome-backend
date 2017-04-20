@@ -2,30 +2,35 @@ module Authorization
   class UnauthorizedError < StandardError
   end
 
-  def authorize!(*args)
-    if !authorize(*args)
+  def current_user
+    return unless session[:user_id]
+    @current_user ||= User.find(session[:user_id])
+  end
+
+  def user_matches_params?
+    current_user && params[:user_id] == session[:user_id]
+  end
+
+  def require_logged_in
+    if !current_user
       raise Authorization::UnauthorizedError
     end
   end
 
-  def authorize(admin: false)
-    valid_user = current_user && !params[:user_id] || params[:user_id] == session[:user_id]
-    if valid_user
-      valid_permissions = !admin || current_user.is_admin?
+  def authorize_if_needed
+    if params[:user_id] && !user_matches_params?
+      raise Authorization::UnauthorizedError
     end
-    valid_user && valid_permissions
   end
 
-  def require_login
-    authorize!
+  def authorize
+    require_logged_in && user_matches_params?
   end
 
-  def require_admin
-    authorize!(admin: true)
-  end
-
-  def current_user
-    return unless session[:user_id]
-    @current_user ||= User.find(session[:user_id])
+  def authorize_admin
+    require_logged_in
+    if !current_user.is_admin?
+      raise Authorization::UnauthorizedError
+    end
   end
 end
