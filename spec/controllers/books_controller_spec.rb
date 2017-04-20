@@ -31,4 +31,26 @@ describe BooksController do
       expect(response.status).to eq(403)
     end
   end
+  describe '#search' do
+    context 'with valid parameters' do
+      it 'responds with json containing books with the specified genre' do
+        get :search, params: {term: book.genre}
+        expect(response.body).to include(book.to_json)
+      end
+      it 'responds with a 200' do
+        get :search, params: {term: book.genre}
+        expect(response.status).to eq(200)
+      end
+    end
+    context 'with invalid parameters'do
+      it 'responds with a 404' do
+        get :search, params: {term: 'garbagegarbage'}
+        expect(response.status).to eq(404)
+      end
+      it 'responds with an error message as json' do
+        get :search, params: {term: 'garbagegarbage'}
+        expect(response.body).to include("Books with the genre of garbagegarbage not found")
+      end
+    end
+  end
 end
