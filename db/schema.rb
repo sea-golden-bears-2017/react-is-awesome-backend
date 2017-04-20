@@ -41,8 +41,8 @@ ActiveRecord::Schema.define(version: 20170420031723) do
   end
 
   create_table "friends", id: false, force: :cascade do |t|
-    t.integer "user_a_id", null: false
-    t.integer "user_b_id", null: false
+    t.integer "user_id",   null: false
+    t.integer "friend_id", null: false
   end
 
   create_table "products", force: :cascade do |t|
