@@ -16,7 +16,10 @@ describe FriendsController do
 
       it 'returns a json array of the users friends' do
         get :index, params: { user_id: user.id }
-        expect(response.body).to include(friend.to_json)
+        expect(response.body).to include({
+          id: friend.id,
+          name: friend.name,
+        }.to_json)
       end
 
       it "returns a 403 when trying to view the friend user's index" do
@@ -81,7 +84,10 @@ describe FriendsController do
 
       it 'returns a list of the current friends on success' do
         get :create, params: {user_id: friend.id, id: user.id }
-        expect(response.body).to include(user.to_json)
+        expect(response.body).to include({
+          id: user.id,
+          name: user.name,
+        }.to_json)
       end
 
       it 'returns a 404 status code if the user id is invalid' do

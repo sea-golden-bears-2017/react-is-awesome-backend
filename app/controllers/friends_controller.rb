@@ -3,9 +3,7 @@ class FriendsController < ApplicationController
   before_action :authorize_if_needed
 
   def index
-    # TODO this returns things like the password_digest
-    # and is_admin?
-    render json: endpoint_user.friends
+    render json: convert_friends_for_display(endpoint_user.friends)
   end
 
   def create
@@ -16,7 +14,7 @@ class FriendsController < ApplicationController
       friend = User.find_by(id: friend_id)
       if friend
         current_user.friends << friend
-        render json: current_user.friends, status: :created
+        render json: convert_friends_for_display(current_user.friends), status: :created
       else
         render json: { error: "User id #{friend_id} not found" }, status: 404
       end
@@ -37,5 +35,14 @@ class FriendsController < ApplicationController
   private
   def friend_id
     params.require(:id).to_i
+  end
+
+  def convert_friends_for_display(friends)
+    endpoint_user.friends.map do |friend|
+      {
+        id: friend.id,
+        name: friend.name,
+      }
+    end
   end
 end
