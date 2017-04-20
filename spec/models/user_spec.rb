@@ -13,5 +13,17 @@ describe User do
       user.books << book
       expect(user.books).to include(book)
     end
+
+    it 'can be associated with another friend' do
+      user2 = FactoryGirl.create(:user)
+      user.friends << user2
+      expect(user.friends).to include(user2)
+    end
+
+    it 'has one-directional association' do
+      user2 = FactoryGirl.create(:user)
+      user.friends << user2
+      expect(user2.friends).not_to include(user2)
+    end
   end
 end
