@@ -10,7 +10,6 @@ class FriendsController < ApplicationController
 
   def create
     require_self
-    friend_id = friends_params[:id]
     if current_user.id == friend_id
       render json: { error: "Cannot friend oneself" }, status: 400
     else
@@ -26,7 +25,6 @@ class FriendsController < ApplicationController
 
   def destroy
     require_self
-    friend_id = friends_params[:id]
     friend = User.find_by(id: friend_id)
     if friend
       current_user.friends.delete(friend)
@@ -37,10 +35,7 @@ class FriendsController < ApplicationController
   end
 
   private
-  def friends_params
-    # TODO how to throw a 400 if the id is missing?
-    {
-      id: params.fetch(:id, '').to_i,
-    }
+  def friend_id
+    params.require(:id).to_i
   end
 end

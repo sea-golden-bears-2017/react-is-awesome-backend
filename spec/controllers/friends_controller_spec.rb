@@ -8,7 +8,7 @@ describe FriendsController do
   context 'when logged in as the user' do
     before(:each) { session[:user_id] = user.id.to_s }
 
-    describe 'FoodsController#index' do
+    describe 'FriendsController#index' do
       it 'returns a 200 status code when viewing your own friends page' do
         get :index, params: { user_id: user.id }
         expect(response.status).to be(200)
@@ -25,14 +25,14 @@ describe FriendsController do
       end
     end
 
-    describe 'FoodsController#create' do
+    describe 'FriendsController#create' do
       it 'returns a 201 status code when the friend already exists' do
         get :create, params: { user_id: user.id, id: friend.id }
         expect(response.status).to be(201)
       end
     end
 
-    describe 'FoodsController#destroy' do
+    describe 'FriendsController#destroy' do
       it 'returns a 200 status code when removing a friend' do
         get :destroy, params: { user_id: user.id, id: friend.id }
         expect(response.status).to be(200)
@@ -55,14 +55,14 @@ describe FriendsController do
   context 'when logged in as the friend' do
     before(:each) { session[:user_id] = friend.id.to_s }
 
-    describe 'FoodsController#index' do
+    describe 'FriendsController#index' do
       it 'returns a 200 status code when trying to view the users friends' do
         get :index, params: { user_id: user.id }
         expect(response.status).to be(200)
       end
     end
 
-    describe 'FoodsController#create' do
+    describe 'FriendsController#create' do
       it 'returns a 403 when trying to add a friend to user' do
         get :create, params: {user_id: user.id, id: friend.id }
         expect(response.status).to be(403)
@@ -95,7 +95,7 @@ describe FriendsController do
       end
     end
 
-    describe 'FoodsController#destroy' do
+    describe 'FriendsController#destroy' do
       it 'returns a 403 when trying to destroy a friend to user' do
         get :destroy, params: {user_id: user.id, id: friend.id }
         expect(response.status).to be(403)
