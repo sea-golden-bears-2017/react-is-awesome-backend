@@ -26,4 +26,18 @@ describe User do
       expect(user2.friends).not_to include(user2)
     end
   end
+
+  context 'friends' do
+    let(:user) { FactoryGirl.create(:user) }
+    let(:friend) { FactoryGirl.create(:user) }
+    before(:each) { user.friends << friend }
+
+    it 'has friend as a friend' do
+      expect(user.has_friend?(friend.id)).to be(true)
+    end
+
+    it 'is not a friend of friend' do
+      expect(user.is_friend_of?(friend.id)).to be(false)
+    end
+  end
 end
