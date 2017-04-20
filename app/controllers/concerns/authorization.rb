@@ -2,30 +2,38 @@ module Authorization
   class UnauthorizedError < StandardError
   end
 
-  def authorize!(*args)
-    if !authorize(*args)
+  def current_user
+    return unless session[:user_id]
+    @current_user ||= User.find_by(id: session[:user_id])
+  end
+
+  def endpoint_user
+    return unless params[:user_id]
+    endpoint_user ||= User.find_by(id: params[:user_id])
+  end
+
+  def require_current_user
+    raise Authorization::UnauthorizedError unless current_user
+  end
+
+  def require_self
+    require_current_user
+    if params[:user_id] && params[:user_id] != session[:user_id]
       raise Authorization::UnauthorizedError
     end
   end
 
-  def authorize(admin: false)
-    valid_user = current_user && !params[:user_id] || params[:user_id] == session[:user_id]
-    if valid_user
-      valid_permissions = !admin || current_user.is_admin?
-    end
-    valid_user && valid_permissions
-  end
-
-  def require_login
-    authorize!
-  end
-
   def require_admin
-    authorize!(admin: true)
+    require_current_user
+    raise Authorization::UnauthorizedError unless current_user.is_admin?
   end
 
-  def current_user
-    return unless session[:user_id]
-    @current_user ||= User.find(session[:user_id])
+  def authorize_if_needed
+    if params[:user_id]
+      require_current_user
+      if params[:user_id] != session[:user_id]
+        raise Authorization::UnauthorizedError unless current_user.is_friend_of?(params[:user_id])
+      end
+    end
   end
 end

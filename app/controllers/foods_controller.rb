@@ -1,6 +1,6 @@
 class FoodsController < ApplicationController
   include Authorization
-  before_action :require_login
+  before_action :authorize_if_needed
   def index
     render json: Food.all
   end
@@ -10,7 +10,7 @@ class FoodsController < ApplicationController
     if food
       render json: food
     else
-      render json: { error: "Food id#{params[:id]} not found" }, status: 404
+      render json: { error: "Food id #{params[:id]} not found" }, status: 404
     end
   end
 
@@ -32,7 +32,7 @@ class FoodsController < ApplicationController
       food.destroy
       render json: { status: "destroyed" }
     else
-      render json: { error: "Invalid parameters" }, status: 400
+      render json: { error: "Food not found" }, status: 404
     end
   end
 

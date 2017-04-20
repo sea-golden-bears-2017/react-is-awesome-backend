@@ -20,3 +20,6 @@ Gemfile.lock
 
 # For folks with bundles installed locally
 vendor/
+
+# For rspec failing tests
+spec/examples.txt
