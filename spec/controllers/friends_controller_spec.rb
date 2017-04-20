@@ -24,6 +24,32 @@ describe FriendsController do
         expect(response.status).to be(403)
       end
     end
+
+    describe 'FoodsController#create' do
+      it 'returns a 201 status code when the friend already exists' do
+        get :create, params: { user_id: user.id, id: friend.id }
+        expect(response.status).to be(201)
+      end
+    end
+
+    describe 'FoodsController#destroy' do
+      it 'returns a 200 status code when removing a friend' do
+        get :destroy, params: { user_id: user.id, id: friend.id }
+        expect(response.status).to be(200)
+      end
+
+      it 'removes the friend relationship from the database' do
+        get :destroy, params: { user_id: user.id, id: friend.id }
+        user.friends.reload
+        expect(user.friends).not_to include(friend)
+      end
+
+      it 'returns a 404 status code if the friend id is invalid' do
+
+        get :destroy, params: { user_id: user.id, id: 841733 }
+        expect(response.status).to be(404)
+      end
+    end
   end
 
   context 'when logged in as the friend' do

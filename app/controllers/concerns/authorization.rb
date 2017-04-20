@@ -32,7 +32,6 @@ module Authorization
     if params[:user_id]
       require_current_user
       if params[:user_id] != session[:user_id]
-        p current_user.friends
         raise Authorization::UnauthorizedError unless current_user.is_friend_of?(params[:user_id])
       end
     end
