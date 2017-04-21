@@ -6,7 +6,7 @@ describe FriendsController do
   before(:each) { user.friends << friend }
 
   context 'when logged in as the user' do
-    before(:each) { session[:user_id] = user.id.to_s }
+    before(:each) { session[:user_id] = user.id }
 
     describe 'FriendsController#index' do
       it 'returns a 200 status code when viewing your own friends page' do
@@ -56,7 +56,7 @@ describe FriendsController do
   end
 
   context 'when logged in as the friend' do
-    before(:each) { session[:user_id] = friend.id.to_s }
+    before(:each) { session[:user_id] = friend.id }
 
     describe 'FriendsController#index' do
       it 'returns a 200 status code when trying to view the users friends' do

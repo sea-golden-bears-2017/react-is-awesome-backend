@@ -21,7 +21,7 @@ describe BooksController do
     end
 
     it 'responds with json containing books for a specific user when a user is logged in' do
-      session[:user_id] = user.id.to_s
+      session[:user_id] = user.id
       get :index, params: {user_id: user.id}
       expect(response.body).to include(book.to_json)
     end
