@@ -23,7 +23,10 @@ describe UsersController do
     end
     it 'responds with a json blob containing the newly updated user info' do
       put :update, params: {id: user.id, user: {name: name }}
-      expect(response.body).to include(name)
+      expect(response.body).to include({
+        id: user.id,
+        name: name,
+      }.to_json)
     end
 
     it 'returns a 403 status code if trying to update without having the password' do
