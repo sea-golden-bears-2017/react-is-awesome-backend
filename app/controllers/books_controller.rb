@@ -10,7 +10,33 @@ class BooksController < ApplicationController
   end
 
   def show
-    render json: Book.find(params[:id])
+    if params[:user_id]
+      raise NotImplementedError
+    else
+      render json: Book.find(book_id)
+    end
+  end
+
+  def update
+    if params[:user_id]
+      book = Book.find(book_id)
+      endpoint_user.books << book
+      render json: { status: "updated" }
+    else
+      raise NotImplementedError
+    end
+  end
+
+  def destroy
+    if params[:user_id]
+      book = Book.find(book_id)
+      endpoint_user.books.delete(book)
+    else
+      require_admin
+      book = Book.find(book_id)
+      book.delete()
+    end
+    render json: { status: "destroyed" }
   end
 
   def search
@@ -20,5 +46,10 @@ class BooksController < ApplicationController
     else
       render json: {error: "Books with the genre of #{params[:term]} not found"}, status: 404
     end
+  end
+
+  private
+  def book_id
+    params.require(:id)
   end
 end

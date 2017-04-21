@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   resources :books, except: :update
   get '/books/search/:term', to: 'books#search'
   resources :users do
-    resources :books, except: [:create, :show, :new]
+    resources :books, only: [:index, :update, :destroy]
     resources :friends, only: [:index, :create, :destroy]
   end
   resources :products, only: :index
