@@ -2,7 +2,7 @@ class SessionsController < ApplicationController
   def create
     return render json: {error: "You are already logged in. Your session id is set to #{session[:id]}"} if session[:id]
     user = User.find_by(name: session_params[:name])
-    if user.authenticate(session_params[:password])
+    if user && user.authenticate(session_params[:password])
       session[:id] = user.id
       render json: {session_id: session[:id]}
     else
