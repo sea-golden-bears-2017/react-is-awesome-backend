@@ -1,4 +1,6 @@
 class UsersController < ApplicationController
+  include Authorization
+  
   def create
     user = User.new(user_params)
     user.save
@@ -6,6 +8,7 @@ class UsersController < ApplicationController
   end
 
   def update
+    require_self
     user = User.find(params[:id])
     user.update_attributes(user_params)
     render json: user
