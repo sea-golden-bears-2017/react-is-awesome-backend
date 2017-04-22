@@ -55,13 +55,40 @@ describe BooksController do
           put :update, params: { user_id: user.id, id: 4771717 }
           expect(response.status).to be(404)
         end
+
+        it 'returns a useful error message when the book id is invalid' do
+            put :update, params: { user_id: user.id, id: 4771717 }
+            expect(response.body).to eq({
+              error: "Couldn't find Book with 'id'=4771717",
+            }.to_json)
+        end
       end
 
-      it 'returns a useful error message when the book id is invalid' do
-          put :update, params: { user_id: user.id, id: 4771717 }
-          expect(response.body).to eq({
-            error: "Couldn't find Book with 'id'=4771717",
-          }.to_json)
+      describe 'BooksController#destroy' do
+        before(:each) { user.books << book }
+
+        it 'returns a 200 status when removing an association' do
+          put :destroy, params: { user_id: user.id, id: book.id }
+          expect(response.status).to be(200)
+        end
+
+        it 'removes the book from the users collection' do
+          put :destroy, params: { user_id: user.id, id: book.id }
+          user.books.reload
+          expect(user.books).not_to include(book)
+        end
+
+        it 'returns a 404 status when the book isnt found' do
+          put :destroy, params: { user_id: user.id, id: 4771717 }
+          expect(response.status).to be(404)
+        end
+        
+        it 'returns a useful error message when the book id is invalid' do
+            put :update, params: { user_id: user.id, id: 4771717 }
+            expect(response.body).to eq({
+              error: "Couldn't find Book with 'id'=4771717",
+            }.to_json)
+        end
       end
     end
 
