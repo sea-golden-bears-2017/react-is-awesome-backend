@@ -1,6 +1,5 @@
 class ApplicationController < ActionController::API
   include ActiveModel::ForbiddenAttributesProtection
-  rescue_from Authorization::UnauthorizedError, with: :unauthorized_error
 
   rescue_from ActionController::ParameterMissing do |exception|
     p 'hi'
@@ -16,9 +15,7 @@ class ApplicationController < ActionController::API
     render json: {type: 'InvalidData', message: exception.message }, status: 400
   end
 
-  private
-  def unauthorized_error
-    error = 'Unauthorized access. Please log in and try again'
-    render json: {type: 'Unauthorized', error: error }, status: 403
+  rescue_from Exceptions::ApiException do |exception|
+    render json: exception, status: exception.status
   end
 end
