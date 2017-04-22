@@ -21,6 +21,18 @@ describe UsersController do
       post :create, params: { user: { name: Faker::Name.name } }
       expect(JSON.parse(response.body)["type"]).to eq('ParameterMissing')
     end
+
+    it 'returns a 400 status if the user already exists' do
+      User.create(user_params[:user])
+      post :create, params: user_params
+      expect(response.status).to be(400)
+    end
+
+    it 'returns a UserExists if the user already exists' do
+      User.create(user_params[:user])
+      post :create, params: user_params
+      expect(JSON.parse(response.body)["type"]).to eq('UserExists')
+    end
   end
   describe '#update' do
     let(:name) { Faker::Name.name }

@@ -4,11 +4,15 @@ class UsersController < ApplicationController
   def create
     create_params = require_params(:name, :password)
     user = User.new(create_params)
-    user.save!
-    render json: {
-      id: user.id,
-      name: user.name,
-    }
+    begin
+      user.save!
+      render json: {
+        id: user.id,
+        name: user.name,
+      }
+    rescue ActiveRecord::RecordNotUnique
+      render json: {type: "UserExists", message: "#{create_params[:name]} already exists in the database, pick another name"}, status: 400
+    end
   end
 
   def update
