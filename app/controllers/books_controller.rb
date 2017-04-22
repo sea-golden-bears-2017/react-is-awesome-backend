@@ -19,6 +19,7 @@ class BooksController < ApplicationController
 
   def update
     if params[:user_id]
+      require_self
       book = Book.find(book_id)
       endpoint_user.books << book
       render json: endpoint_user.books
@@ -29,6 +30,7 @@ class BooksController < ApplicationController
 
   def destroy
     if params[:user_id]
+      require_self
       book = Book.find(book_id)
       endpoint_user.books.delete(book)
     else
