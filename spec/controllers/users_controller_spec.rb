@@ -35,25 +35,30 @@ describe UsersController do
     end
   end
   describe '#update' do
-    let(:name) { Faker::Name.name }
+    let(:password) { Faker::Internet.password }
+    let(:params) { {id: user.id, user: { password: password } } }
+
     before(:each) do
       session[:user_id] = user.id
     end
-    it 'updates a user in the database' do
-      put :update, params: {id: user.id, user: {name: name }}
-      expect(user.reload.name).to eq(name.downcase)
+
+    it 'updates a password in the database' do
+      put :update, params: params
+      user.reload
+      expect(user.authenticate(password)).not_to be_nil
     end
+
     it 'responds with a json blob containing the newly updated user info' do
-      put :update, params: {id: user.id, user: {name: name }}
+      put :update, params: params
       expect(response.body).to include({
         id: user.id,
-        name: name.downcase,
+        name: user.name,
       }.to_json)
     end
 
     it 'returns a 403 status code if trying to update without having the password' do
       session[:user_id] = 435235
-      put :update, params: {id: user.id, user: {name: name }}
+      put :update, params: params
       expect(response.status).to be(403)
     end
   end
