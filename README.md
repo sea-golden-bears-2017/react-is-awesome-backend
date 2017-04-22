@@ -26,6 +26,7 @@ Notes: The name is always lower-cased on the backend side.
 Name | URL | Method | Description
 -----|-----|--------|-----------
 Create | /users/ | POST | Creates a new user
+
 Parameters:
 
 Name | Type | Required | Example
@@ -34,7 +35,7 @@ user | hash | yes         | user: { name: ... }
 user[:name] | string | yes | 'the commish'
 user[:password] | string | yes | 'password1'
 user[:is_admin?] | boolean | no | false
-
+  
 Potential responses:
 
 Type   | Status | Example
