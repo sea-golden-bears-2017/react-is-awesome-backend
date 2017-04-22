@@ -58,9 +58,7 @@ describe BooksController do
 
         it 'returns a useful error message when the book id is invalid' do
             put :update, params: { user_id: user.id, id: 4771717 }
-            expect(response.body).to eq({
-              error: "Couldn't find Book with 'id'=4771717",
-            }.to_json)
+            expect(JSON.parse(response.body)["type"]).to eq("NotFound")
         end
       end
 
@@ -82,12 +80,10 @@ describe BooksController do
           put :destroy, params: { user_id: user.id, id: 4771717 }
           expect(response.status).to be(404)
         end
-        
+
         it 'returns a useful error message when the book id is invalid' do
             put :update, params: { user_id: user.id, id: 4771717 }
-            expect(response.body).to eq({
-              error: "Couldn't find Book with 'id'=4771717",
-            }.to_json)
+            expect(JSON.parse(response.body)["type"]).to eq("NotFound")
         end
       end
     end

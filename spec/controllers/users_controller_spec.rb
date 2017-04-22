@@ -11,6 +11,11 @@ describe UsersController do
       post :create, params: user_params
       expect(response.body).to include(user_params[:user][:name])
     end
+
+    it 'returns a 400 if required fields are missing' do
+      post :create, params: { user: { password: 'password1' }}
+      expect(response.status).to be(400)
+    end
   end
   describe '#update' do
     let(:name) { Faker::Name.name }
