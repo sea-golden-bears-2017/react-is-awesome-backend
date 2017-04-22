@@ -1,5 +1,12 @@
 require 'rails_helper'
 describe User do
+  describe 'validations' do
+    it 'downcases the user name' do
+      user = User.new(name: 'Mr. Burns', password: Faker::Internet.password)
+      user.save!
+      expect(user.name).to eq('mr. burns')
+    end
+  end
   context 'associations' do
     let(:user) { FactoryGirl.create(:user) }
     let(:book) { FactoryGirl.create(:book) }

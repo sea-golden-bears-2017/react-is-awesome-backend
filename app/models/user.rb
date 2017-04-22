@@ -4,6 +4,7 @@ class User < ApplicationRecord
   validates_presence_of :name
   has_many :book_users
   has_many :books, through: :book_users
+  before_save { |user| user.name = user.name.downcase }
 
   def has_friend?(user_id)
     self.friends.exists?(user_id)

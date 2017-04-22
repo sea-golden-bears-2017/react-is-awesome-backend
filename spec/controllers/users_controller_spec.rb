@@ -9,7 +9,7 @@ describe UsersController do
     end
     it 'responds with a json blob containing the name of newly created user' do
       post :create, params: user_params
-      expect(response.body).to include(user_params[:user][:name])
+      expect(response.body).to include(user_params[:user][:name].downcase)
     end
 
     it 'returns a 400 if required fields are missing' do
@@ -41,13 +41,13 @@ describe UsersController do
     end
     it 'updates a user in the database' do
       put :update, params: {id: user.id, user: {name: name }}
-      expect(user.reload.name).to eq(name)
+      expect(user.reload.name).to eq(name.downcase)
     end
     it 'responds with a json blob containing the newly updated user info' do
       put :update, params: {id: user.id, user: {name: name }}
       expect(response.body).to include({
         id: user.id,
-        name: name,
+        name: name.downcase,
       }.to_json)
     end
 
