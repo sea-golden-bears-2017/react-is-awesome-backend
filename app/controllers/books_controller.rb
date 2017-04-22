@@ -21,7 +21,7 @@ class BooksController < ApplicationController
     if params[:user_id]
       book = Book.find(book_id)
       endpoint_user.books << book
-      render json: { status: "updated" }
+      render json: endpoint_user.books
     else
       raise NotImplementedError
     end

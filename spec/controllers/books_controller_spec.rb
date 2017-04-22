@@ -8,29 +8,87 @@ describe BooksController do
       expect(response.body).to include(book.to_json)
     end
   end
+
   describe 'BooksController#show' do
     it 'renders a json blob containing a book' do
       get :show, params: {id: book.id}
       expect(response.body).to eq(book.to_json)
     end
   end
-  context 'passed a user_id' do
+
+  context 'for a specific user' do
     let(:user) { FactoryGirl.create :user }
-    before(:each) do
-      user.books << book
+
+    context 'when logged in as that user' do
+      before (:each) { session[:user_id] = user.id }
+
+      describe 'BooksController#index' do
+        before (:each) { user.books << book }
+        it 'responds with a 200 status code when viewing the users books' do
+          get :index, params: {user_id: user.id}
+          expect(response.status).to be(200)
+        end
+
+        it 'responds with a json array of the users books' do
+          get :index, params: {user_id: user.id}
+          expect(response.body).to include(book.to_json)
+        end
+      end
+
+      describe 'BooksController#update' do
+        it 'responds with a 200 status code when adding a book to a user' do
+          put :update, params: { user_id: user.id, id: book.id }
+          expect(response.status).to be(200)
+        end
+
+        it 'updates the users books' do
+          put :update, params: { user_id: user.id, id: book.id }
+          expect(user.books).to include(book)
+        end
+
+        it 'returns the users books' do
+          put :update, params: { user_id: user.id, id: book.id }
+          expect(response.body).to eq (user.books.to_json)
+        end
+
+        it 'returns a 404 status code when the book id is invalid' do
+          put :update, params: { user_id: user.id, id: 4771717 }
+          expect(response.status).to be(404)
+        end
+      end
+
+      it 'returns a useful error message when the book id is invalid' do
+          put :update, params: { user_id: user.id, id: 4771717 }
+          expect(response.body).to eq({
+            error: "Couldn't find Book with 'id'=4771717",
+          }.to_json)
+      end
     end
 
-    it 'responds with json containing books for a specific user when a user is logged in' do
-      session[:user_id] = user.id
-      get :index, params: {user_id: user.id}
-      expect(response.body).to include(book.to_json)
-    end
+    context 'when not logged in as that user' do
+      describe 'BooksController#index' do
+        it 'returns a 403 status code' do
+          get :index, params: {user_id: user.id}
+          expect(response.status).to be(403)
+        end
+      end
 
-    it 'responds with a status of 403 when a user is not logged in' do
-      get :index, params: {user_id: user.id}
-      expect(response.status).to eq(403)
+      describe 'BooksController#update' do
+        it 'returns a 403 status code' do
+          put :update, params: {user_id: user.id, id: book.id}
+          expect(response.status).to be(403)
+        end
+      end
+
+      describe 'BooksController#destroy' do
+        it 'returns a 403 status code' do
+          put :destroy, params: {user_id: user.id, id: book.id}
+          expect(response.status).to be(403)
+        end
+      end
     end
   end
+
   describe '#search' do
     context 'with valid parameters' do
       it 'responds with json containing books with the specified genre' do
