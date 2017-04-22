@@ -23,9 +23,9 @@ be rails s
 
 Notes: The name is always lower-cased on the backend side.
 
-Name | URL | Method | Description
------|-----|--------|-----------
-Create | /users/ | POST | Creates a new user
+Name | URL | Method | Auth | Description
+-----|-----|--------|------|------------
+Create | /users/ | POST | no | Creates a new user
 
 Parameters:
 
@@ -35,12 +35,34 @@ user | hash | yes         | user: { name: ... }
 user[:name] | string | yes | 'the commish'
 user[:password] | string | yes | 'password1'
 user[:is_admin?] | boolean | no | false
-  
+
 Potential responses:
 
 Type   | Status | Example
 -------|--------|--------
-Success | 200 | { id: 7, name: "Jordan" }
+Success | 200 | { id: 7, name: "jordan" }
 Missing params | 400 | { type: "ParameterMissing" }
 Params invalid | 400 | { type: "InvalidData" }
 User already exists | 400 | { type: "UserExists" }
+
+#### Update
+
+Name | URL | Method | Auth | Description
+-----|-----|--------|------|------------
+Update | /users/1/ | PUT | as user | Updates the password for a user
+
+Parameters:
+
+Name | Type | Required | Example
+-----|------|-----------|-------
+user | hash | yes         | user: { password: ... }
+user[:password] | string | yes | 'password1'
+
+Potential responses:
+
+Type   | Status | Example
+-------|--------|--------
+Success | 200 | { id: 7, name: "jordan" }
+Missing params | 400 | { type: "ParameterMissing" }
+Params invalid | 400 | { type: "InvalidData" }
+Not logged in | 403 | { type: "Unauthorized" }
