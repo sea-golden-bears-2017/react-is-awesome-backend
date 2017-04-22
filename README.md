@@ -49,7 +49,7 @@ User already exists | 400 | { type: "UserExists" }
 
 Name | URL | Method | Auth | Description
 -----|-----|--------|------|------------
-Update | /users/1/ | PUT | as user | Updates the password for a user
+Update | /users/7/ | PUT | as user | Updates the password for a user
 
 Parameters:
 
