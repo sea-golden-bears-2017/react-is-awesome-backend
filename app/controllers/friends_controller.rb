@@ -11,25 +11,17 @@ class FriendsController < ApplicationController
     if current_user.id == friend_id
       render json: { error: "Cannot friend oneself" }, status: 400
     else
-      friend = User.find_by(id: friend_id)
-      if friend
-        current_user.friends << friend
-        render json: convert_friends_for_display(current_user.friends), status: :created
-      else
-        render json: { error: "User id #{friend_id} not found" }, status: 404
-      end
+      friend = User.find(friend_id)
+      current_user.friends << friend
+      render json: convert_friends_for_display(current_user.friends), status: :created
     end
   end
 
   def destroy
     require_self
-    friend = User.find_by(id: friend_id)
-    if friend
-      current_user.friends.delete(friend)
-      render json: { status: "destroyed" }
-    else
-      render json: { error: "Friend not found" }, status: 404
-    end
+    friend = User.find(friend_id)
+    current_user.friends.delete(friend)
+    render json: { status: "destroyed" }
   end
 
   private
