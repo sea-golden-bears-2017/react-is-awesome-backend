@@ -13,8 +13,13 @@ describe UsersController do
     end
 
     it 'returns a 400 if required fields are missing' do
-      post :create, params: { user: { password: 'password1' }}
+      post :create, params: { user: { name: Faker::Name.name } }
       expect(response.status).to be(400)
+    end
+
+    it 'returns a ParameterMissing when fields are missing' do
+      post :create, params: { user: { name: Faker::Name.name } }
+      expect(JSON.parse(response.body)["type"]).to eq('ParameterMissing')
     end
   end
   describe '#update' do

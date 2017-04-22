@@ -3,6 +3,8 @@ class ApplicationController < ActionController::API
   rescue_from Authorization::UnauthorizedError, with: :unauthorized_error
 
   rescue_from ActionController::ParameterMissing do |exception|
+    p 'hi'
+    p exception
     render json: {type: 'ParameterMissing', message: exception.message }, status: 400
   end
 
