@@ -2,12 +2,10 @@ class SessionsController < ApplicationController
   def create
     raise Exceptions::AlreadyLoggedInError if session[:user_id]
     user = User.find_by(name: session_params[:name].downcase)
-    if user && user.authenticate(session_params[:password])
-      session[:user_id] = user.id
-      render json: {user_id: user.id}
-    else
-      render json: {error: "Invalid user name or password."}.to_json, status: 403
-    end
+    raise Exceptions::UnauthorizedError if !user || !user.authenticate(session_params[:password])
+
+    session[:user_id] = user.id
+    render json: {user_id: user.id}
   end
 
   def destroy
@@ -18,6 +16,8 @@ class SessionsController < ApplicationController
   private
 
   def session_params
-    params.permit(:name, :password)
+    params.require(:user).permit(:name, :password).tap do |session_params|
+      session_params.require([:name, :password])
+    end
   end
 end

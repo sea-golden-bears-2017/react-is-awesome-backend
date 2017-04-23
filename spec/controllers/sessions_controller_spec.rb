@@ -5,26 +5,27 @@ describe SessionsController, type: :controller do
   let(:user) {FactoryGirl.create :user}
   describe '#create' do
     context 'on valid params' do
+      let(:params) { { user: { name: user.name, password: user.password } } }
       before(:each) do
-        post :create, params: {name: user.name, password: user.password }
       end
       it 'sets the session id to the id of the user' do
+        post :create, params: params
         expect(session[:user_id]).to eq(user.id)
       end
       it 'responds with the newly set session id' do
+        post :create, params: params
         parsed_response = JSON.parse(response.body)
         expect(parsed_response["user_id"]).to eq(user.id)
       end
     end
     context 'on invalid params' do
-      before(:each) do
-        post :create, params: {name: user.name, password: 'ham' }
-      end
+      let(:params) { { user: { name: user.name, password: 'ham' } } }
       it 'responds with a status of 403' do
-        expect(response).to have_http_status(403)
+        post :create, params: params
       end
       it 'responds with an error message stating credentials are invalid' do
-        expect(response.body).to include("Invalid user name or password.")
+        post :create, params: params
+        expect(JSON.parse(response.body)["type"]).to eq("Unauthorized")
       end
     end
     it 'when a user is logged in it responds with an error message stating user is currently logged in' do
