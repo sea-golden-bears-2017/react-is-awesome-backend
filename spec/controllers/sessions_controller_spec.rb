@@ -30,7 +30,7 @@ describe SessionsController, type: :controller do
     it 'when a user is logged in it responds with an error message stating user is currently logged in' do
       session[:user_id] = user.id
       post :create, params: {name: user.name, password: user.password }
-      expect(response.body).to include("You are already logged in. Your session id is set to #{session[:user_id]}")
+      expect(JSON.parse(response.body)["type"]).to eq("AlreadyLoggedIn")
     end
   end
   describe '#destroy' do

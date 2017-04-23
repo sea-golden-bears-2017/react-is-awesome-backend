@@ -1,6 +1,6 @@
 class SessionsController < ApplicationController
   def create
-    return render json: {error: "You are already logged in. Your session id is set to #{session[:user_id]}"} if session[:user_id]
+    raise Exceptions::AlreadyLoggedInError if session[:user_id]
     user = User.find_by(name: session_params[:name].downcase)
     if user && user.authenticate(session_params[:password])
       session[:user_id] = user.id
