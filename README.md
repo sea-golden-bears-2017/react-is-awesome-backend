@@ -66,3 +66,47 @@ Success | 200 | { id: 7, name: "jordan" }
 Missing params | 400 | { type: "ParameterMissing" }
 Params invalid | 400 | { type: "InvalidData" }
 Not logged in | 403 | { type: "Unauthorized" }
+
+### Session
+A session is used to log a user in and out. When logged in, a user can access routes specific to that user, or one of a friend.
+
+When logging in, a cookie is created on the frontend, and that is automatically sent in subsequent routes.
+
+#### Create
+
+Name | URL | Method | Auth | Description
+-----|-----|--------|------|------------
+Create | /session/ | POST | no | Logs in a user
+
+Parameters:
+
+Name | Type | Required | Example
+-----|------|-----------|-------
+user | hash | yes         | user: { name: ... }
+user[:name] | string | yes | 'the commish'
+user[:password] | string | yes | 'password1'
+
+Potential responses:
+
+Type   | Status | Example
+-------|--------|--------
+Success | 200 | { id: 7 }
+Already have a session | 400 | { type: "AlreadyLoggedIn" }
+Missing params | 400 | { type: "ParameterMissing" }
+Username or password invalid | 403 | { type: "Unauthorized" }
+
+### Destroy
+Logs out a user (if logged in)
+This route is safe to call at any time.
+
+Name | URL | Method | Auth | Description
+-----|-----|--------|------|------------
+Delete | /session/ | DELETE | no | Logs out a user
+
+Parameters: None
+
+Potential responses:
+
+Type   | Status | Example
+-------|--------|--------
+Success | 200 | {message: "You have been successfully logged out"}
