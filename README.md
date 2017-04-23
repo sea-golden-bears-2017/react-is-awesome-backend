@@ -281,3 +281,19 @@ Type   | Status | Example
 Success | 200 | {status: "destroyed"}
 Unknown book or user | 404 | {type: "NotFound"}
 Not logged in as user 7 | 403 | {type: "Unauthorized"}
+
+#### Search
+Finds all books in the database by genre
+
+Name | URL | Method | Auth | Description
+-----|-----|--------|------|------------
+Search | /books/search/Reference%20book | GET | no | Finds all books that are in the Reference book genre
+
+Parameters: None
+
+Potential responses:
+
+Type   | Status | Example
+-------|--------|--------
+Success | 200 | [{ id: 6, title: "The Mermaids Singing", author: "Miss Lilyan McCullough", publisher: "SAGE Publications", genre: "Reference book"}, ...]
+No results found | 404 | {type: "NotFound"}
