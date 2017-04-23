@@ -15,9 +15,27 @@ module Exceptions
   errors = [
     { name: :UnauthorizedError, message: "Please log in and try again", status: 403 },
     { name: :UserExistsError, message: "This user already exists in the database, pick another name"},
+    { name: :NotFoundError, status: 404 },
+    { name: :ParameterMissing },
+    { name: :InvalidData },
+    { name: :UnknownException, message: "An unexpected error happened on the server", status: 500 },
   ]
 
-  errors.each do |name:, type: name.to_s.chomp('Error'), message:, status: 400|
+  def self.convert_to_api_error(exception)
+    if exception.kind_of?(ApiError)
+      exception
+    elsif exception.kind_of?(ActiveRecord::RecordNotFound)
+      NotFoundError.new(message: exception.message)
+    elsif exception.kind_of?(ActionController::ParameterMissing)
+      ParameterMissing.new(message: exception.message)
+    elsif exception.kind_of?(ActiveRecord::RecordInvalid)
+      InvalidData.new(message: exception.message)
+    else
+      UnknownException.new(message: exception.to_s)
+    end
+  end
+
+  errors.each do |name:, type: name.to_s.chomp('Error'), message: '', status: 400|
     klass = Class.new(ApiError) do
       @type = type
       @message = message
