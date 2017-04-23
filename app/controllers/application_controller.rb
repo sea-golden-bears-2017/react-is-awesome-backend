@@ -2,8 +2,6 @@ class ApplicationController < ActionController::API
   include ActiveModel::ForbiddenAttributesProtection
 
   rescue_from ActionController::ParameterMissing do |exception|
-    p 'hi'
-    p exception
     render json: {type: 'ParameterMissing', message: exception.message }, status: 400
   end
 
@@ -15,7 +13,7 @@ class ApplicationController < ActionController::API
     render json: {type: 'InvalidData', message: exception.message }, status: 400
   end
 
-  rescue_from Exceptions::ApiException do |exception|
+  rescue_from Exceptions::ApiError do |exception|
     render json: exception, status: exception.status
   end
 end

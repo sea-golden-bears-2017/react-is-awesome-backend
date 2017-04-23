@@ -13,7 +13,7 @@ class UsersController < ApplicationController
         name: user.name,
       }
     rescue ActiveRecord::RecordNotUnique
-      render json: {type: "UserExists", message: "#{user_params[:name]} already exists in the database, pick another name"}, status: 400
+      raise Exceptions::UserExistsError.new(message: "#{user_params[:name]} already exists in the database, pick another name")
     end
   end
 
