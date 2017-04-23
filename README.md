@@ -212,3 +212,39 @@ Type   | Status | Example
 Success | 200 | [{ id: 6, title: "The Mermaids Singing", author: "Miss Lilyan McCullough", publisher: "SAGE Publications", genre: "Reference book"} ...]
 Unknown user | 404 | {type: "NotFound"}
 Not logged in as the user or a friend | 403 | {type: "Unauthorized"}
+
+#### Show
+Returns the information about a specific book
+
+Name | URL | Method | Auth | Description
+-----|-----|--------|------|------------
+Index | /books/6 | GET | no | The details of book 6
+
+Parameters: None
+
+Potential responses:
+
+Type   | Status | Example
+-------|--------|--------
+Success | 200 | { id: 6, title: "The Mermaids Singing", author: "Miss Lilyan McCullough", publisher: "SAGE Publications", genre: "Reference book"}
+Unknown book | 404 | {type: "NotFound"}
+
+#### Create
+TBD
+
+#### Update
+Adds a book to a user's collection.
+
+Name | URL | Method | Auth | Description
+-----|-----|--------|------|------------
+Update | users/7/books/6 | PUT | as user | Adds a given book to user 7's books
+
+Parameters: None
+
+Potential responses:
+
+Type   | Status | Example
+-------|--------|--------
+Success | 200 | [{ id: 6, title: "The Mermaids Singing", author: "Miss Lilyan McCullough", publisher: "SAGE Publications", genre: "Reference book"}, ...]
+Unknown book or user | 404 | {type: "NotFound"}
+Not logged in as the user | 403 | {type: "Unauthorized"}
