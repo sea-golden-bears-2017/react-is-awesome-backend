@@ -32,11 +32,11 @@ class BooksController < ApplicationController
     if params[:user_id]
       require_self
       book = Book.find(book_id)
-      endpoint_user.books.delete(book)
+      endpoint_user.books.destroy(book)
     else
       require_admin
       book = Book.find(book_id)
-      book.delete()
+      book.destroy()
     end
     render json: { status: "destroyed" }
   end

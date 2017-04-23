@@ -71,7 +71,7 @@ Not logged in | 403 | { type: "Unauthorized" }
 
 - - -
 
-### Session
+#### Session
 A session is used to log a user in and out. When logged in, a user can access routes specific to that user, or one of a friend.
 
 When logging in, a cookie is created on the frontend, and that is automatically sent in subsequent routes.
@@ -99,7 +99,7 @@ Already have a session | 400 | { type: "AlreadyLoggedIn" }
 Missing params | 400 | { type: "ParameterMissing" }
 Username or password invalid | 403 | { type: "Unauthorized" }
 
-### Destroy
+#### Destroy
 Logs out a user (if logged in)
 This route is safe to call at any time.
 
@@ -237,7 +237,7 @@ Adds a book to a user's collection.
 
 Name | URL | Method | Auth | Description
 -----|-----|--------|------|------------
-Update | users/7/books/6 | PUT | as user | Adds a given book to user 7's books
+Update | users/7/books/6 | PUT | as user | Adds book 6 to user 7's books
 
 Parameters: None
 
@@ -248,3 +248,36 @@ Type   | Status | Example
 Success | 200 | [{ id: 6, title: "The Mermaids Singing", author: "Miss Lilyan McCullough", publisher: "SAGE Publications", genre: "Reference book"}, ...]
 Unknown book or user | 404 | {type: "NotFound"}
 Not logged in as the user | 403 | {type: "Unauthorized"}
+
+#### Destroy
+Removes a book from the database
+
+Name | URL | Method | Auth | Description
+-----|-----|--------|------|------------
+Delete | /books/6 | DELETE | admin | Removes book 6 from the database
+
+Parameters: None
+
+Potential responses:
+
+Type   | Status | Example
+-------|--------|--------
+Success | 200 | {status: "destroyed"}
+Unknown book or user | 404 | {type: "NotFound"}
+Not logged in as an admin | 403 | {type: "Unauthorized"}
+
+Removes a book from a user's collection
+
+Name | URL | Method | Auth | Description
+-----|-----|--------|------|------------
+Delete | users/7/books/6 | DELETE | as user | Removes book 6 from user 7's books
+
+Parameters: None
+
+Potential responses:
+
+Type   | Status | Example
+-------|--------|--------
+Success | 200 | {status: "destroyed"}
+Unknown book or user | 404 | {type: "NotFound"}
+Not logged in as user 7 | 403 | {type: "Unauthorized"}
