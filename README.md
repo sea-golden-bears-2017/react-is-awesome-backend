@@ -134,13 +134,11 @@ Type   | Status | Example
 Success | 200 | [{ id: 8, name: "Anil"} , { id: 21, name: "luciana_díaz"} ...]
 Not logged in as user 7 or user 7's friends | 403 | { type: "Unauthorized" }
 
-
 #### Create
-
 
 Name | URL | Method | Auth | Description
 -----|-----|--------|------|------------
-Create | /users/7/friends | POST | as user or friend of user | Adds a new friend to user 7
+Create | /users/7/friends | POST | as user | Adds a new friend to user 7
 
 Parameters:
 
@@ -161,4 +159,20 @@ Missing params | 400 | { type: "ParameterMissing" }
 Params invalid | 400 | { type: "InvalidData" }
 Friending yourself | 400 | { type: "InvalidData" }
 User already exists | 400 | { type: "UserExists" }
-Not logged in as user 7 or user 7's friends | 403 | { type: "Unauthorized" }
+Not logged in as user 7 | 403 | { type: "Unauthorized" }
+
+#### Delete
+Name | URL | Method | Auth | Description
+-----|-----|--------|------|------------
+Destroy | /users/7/friends/21 | DELETE | as user | Removes friend 21 from user 7's friend list
+
+Parameters: None
+
+Potential responses:
+
+Type   | Status | Example
+-------|--------|--------
+Success | 201 | [{ id: 8, name: "Anil"} , { id: 21, name: "luciana_díaz"} ...]
+Missing params | 400 | { type: "ParameterMissing" }
+Params invalid | 400 | { type: "InvalidData" }
+Not logged in as user 7 | 403 | { type: "Unauthorized" }
