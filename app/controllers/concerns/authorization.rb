@@ -6,7 +6,7 @@ module Authorization
 
   def endpoint_user
     return unless params[:user_id]
-    endpoint_user ||= User.find_by(id: params_id)
+    endpoint_user ||= User.find_by(id: params[:user_id])
   end
 
   def require_current_user
@@ -15,7 +15,7 @@ module Authorization
 
   def require_self
     require_current_user
-    if params[:user_id] && params_id != session[:user_id]
+    if params[:user_id] && endpoint_user != current_user
       raise Exceptions::UnauthorizedError
     end
   end
@@ -28,13 +28,9 @@ module Authorization
   def authorize_if_needed
     if params[:user_id]
       require_current_user
-      if params_id != session[:user_id]
-        raise Exceptions::UnauthorizedError unless current_user.is_friend_of?(params_id)
+      if current_user != endpoint_user
+        raise Exceptions::UnauthorizedError unless current_user.is_friend_of?(params[:user_id])
       end
     end
-  end
-
-  def params_id
-    params[:user_id].to_i
   end
 end

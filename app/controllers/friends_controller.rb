@@ -19,7 +19,7 @@ class FriendsController < ApplicationController
 
   def destroy
     require_self
-    friend = User.find(destroy_friend_params)
+    friend = User.find(params[:id])
     current_user.friends.delete(friend)
     render json: { status: "destroyed" }
   end
@@ -27,32 +27,16 @@ class FriendsController < ApplicationController
   private
   def create_friend_params
     params.require(:friend).permit(:id, :name).tap do |friend_params|
-      if friend_params[:id]
-        require_integer(friend_params[:id])
-      else
+      if !friend_params[:id]
         friend_params.require(:name)
       end
-    end
-  end
-
-  def require_integer(id)
-    begin
-      Integer(id)
-    rescue ArgumentError
-      throw Exceptions::InvalidData(message: "id must be a valid number")
-    end
-  end
-
-  def destroy_friend_params
-    params.require(:id).tap do
-      require_integer(params[:id])
     end
   end
 
   def get_friend_to_add
     friend_params = create_friend_params
     if friend_params[:id]
-      User.find(friend_params[:id].to_i)
+      User.find(friend_params[:id])
     else
       User.find_by!(name: friend_params[:name])
     end
