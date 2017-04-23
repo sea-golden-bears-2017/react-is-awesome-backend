@@ -13,6 +13,10 @@ module Authorization
     raise Exceptions::UnauthorizedError unless current_user
   end
 
+  def require_endpoint_user
+    raise Exceptions::NotFoundError.new(message: "User:#{params[:user_id]} was not found") unless endpoint_user
+  end
+
   def require_self
     require_current_user
     if params[:user_id] && endpoint_user != current_user
@@ -28,6 +32,7 @@ module Authorization
   def authorize_if_needed
     if params[:user_id]
       require_current_user
+      require_endpoint_user
       if current_user != endpoint_user
         raise Exceptions::UnauthorizedError unless current_user.is_friend_of?(params[:user_id])
       end

@@ -66,6 +66,7 @@ Type   | Status | Example
 Success | 200 | { id: 7, name: "jordan" }
 Missing params | 400 | { type: "ParameterMissing" }
 Params invalid | 400 | { type: "InvalidData" }
+Unknown user | 404 | {type: "NotFound"}
 Not logged in | 403 | { type: "Unauthorized" }
 
 - - -
@@ -132,6 +133,7 @@ Potential responses:
 Type   | Status | Example
 -------|--------|--------
 Success | 200 | [{ id: 8, name: "Anil"} , { id: 21, name: "luciana_díaz"} ...]
+Unknown user | 404 | {type: "NotFound"}
 Not logged in as user 7 or user 7's friends | 403 | { type: "Unauthorized" }
 
 #### Create
@@ -159,6 +161,7 @@ Missing params | 400 | { type: "ParameterMissing" }
 Params invalid | 400 | { type: "InvalidData" }
 Friending yourself | 400 | { type: "InvalidData" }
 User already exists | 400 | { type: "UserExists" }
+Unknown user | 404 | {type: "NotFound"}
 Not logged in as user 7 | 403 | { type: "Unauthorized" }
 
 #### Delete
@@ -175,4 +178,37 @@ Type   | Status | Example
 Success | 201 | [{ id: 8, name: "Anil"} , { id: 21, name: "luciana_díaz"} ...]
 Missing params | 400 | { type: "ParameterMissing" }
 Params invalid | 400 | { type: "InvalidData" }
+Unknown user | 404 | {type: "NotFound"}
 Not logged in as user 7 | 403 | { type: "Unauthorized" }
+
+- - -
+
+### Book
+Books can be used in two ways. There is the /books/ route that is used to interact with all books in the library. Only admins can create or remove books from the service. Additionally, you can associate a book with a particular user with /users/7/books/. Per-user associations are _not_ mutually exclusive (meaning that multiple users can have the same book.
+
+#### Index
+Name | URL | Method | Auth | Description
+-----|-----|--------|------|------------
+Index | /books/ | GET | no | A list of all books
+
+Parameters: None
+
+Potential responses:
+
+Type   | Status | Example
+-------|--------|--------
+Success | 200 | [{ id: 6, title: "The Mermaids Singing", author: "Miss Lilyan McCullough", publisher: "SAGE Publications", genre: "Reference book"} ...]
+
+Name | URL | Method | Auth | Description
+-----|-----|--------|------|------------
+Index | users/7/books/ | GET | as user or friend of user 7 | A list of all books associated with the user
+
+Parameters: None
+
+Potential responses:
+
+Type   | Status | Example
+-------|--------|--------
+Success | 200 | [{ id: 6, title: "The Mermaids Singing", author: "Miss Lilyan McCullough", publisher: "SAGE Publications", genre: "Reference book"} ...]
+Unknown user | 404 | {type: "NotFound"}
+Not logged in as the user or a friend | 403 | {type: "Unauthorized"}
