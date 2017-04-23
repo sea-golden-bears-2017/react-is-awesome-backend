@@ -43,11 +43,8 @@ class BooksController < ApplicationController
 
   def search
     books = Book.where(genre: params[:term])
-    if books.any?
-      render json: books, status: 200
-    else
-      render json: {error: "Books with the genre of #{params[:term]} not found"}, status: 404
-    end
+    raise Exceptions::NotFoundError.new unless books.any?
+    render json: books, status: 200
   end
 
   private

@@ -130,7 +130,7 @@ describe BooksController do
       end
       it 'responds with an error message as json' do
         get :search, params: {term: 'garbagegarbage'}
-        expect(response.body).to include("Books with the genre of garbagegarbage not found")
+        expect(JSON.parse(response.body)["type"]).to eq("NotFound")
       end
     end
   end
