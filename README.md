@@ -45,6 +45,7 @@ Missing params | 400 | { type: "ParameterMissing" }
 Params invalid | 400 | { type: "InvalidData" }
 User already exists | 400 | { type: "UserExists" }
 
+
 #### Update
 
 Name | URL | Method | Auth | Description
@@ -66,6 +67,8 @@ Success | 200 | { id: 7, name: "jordan" }
 Missing params | 400 | { type: "ParameterMissing" }
 Params invalid | 400 | { type: "InvalidData" }
 Not logged in | 403 | { type: "Unauthorized" }
+
+- - -
 
 ### Session
 A session is used to log a user in and out. When logged in, a user can access routes specific to that user, or one of a friend.
@@ -90,7 +93,7 @@ Potential responses:
 
 Type   | Status | Example
 -------|--------|--------
-Success | 200 | { id: 7 }
+Success | 201 | { id: 7 }
 Already have a session | 400 | { type: "AlreadyLoggedIn" }
 Missing params | 400 | { type: "ParameterMissing" }
 Username or password invalid | 403 | { type: "Unauthorized" }
@@ -110,3 +113,52 @@ Potential responses:
 Type   | Status | Example
 -------|--------|--------
 Success | 200 | {message: "You have been successfully logged out"}
+
+- - -
+
+### Friend
+Friends are a way to associate a friend with another.
+Adding a friend gives that user permission to view extra data, such as your friend list.
+
+#### Index
+Name | URL | Method | Auth | Description
+-----|-----|--------|------|------------
+Index | /users/7/friends/ | GET | as user or friend of user | A list of the users's friends
+
+Parameters: None
+
+Potential responses:
+
+Type   | Status | Example
+-------|--------|--------
+Success | 200 | [{ id: 8, name: "Anil"} , { id: 21, name: "luciana_díaz"} ...]
+Not logged in as user 7 or user 7's friends | 403 | { type: "Unauthorized" }
+
+
+#### Create
+
+
+Name | URL | Method | Auth | Description
+-----|-----|--------|------|------------
+Create | /users/7/friends | POST | as user or friend of user | Adds a new friend to user 7
+
+Parameters:
+
+Note: Either the name or the id is required. If both are present, then the id is used.
+
+Name | Type | Required | Example
+-----|------|-----------|-------
+friend | hash | yes | friend: { name: ... }
+friend[:name] | string | no | 'luciana_díaz'
+friend[:id] | integer | no | 21
+
+Potential responses:
+
+Type   | Status | Example
+-------|--------|--------
+Success | 201 | [{ id: 8, name: "Anil"} , { id: 21, name: "luciana_díaz"} ...]
+Missing params | 400 | { type: "ParameterMissing" }
+Params invalid | 400 | { type: "InvalidData" }
+Friending yourself | 400 | { type: "InvalidData" }
+User already exists | 400 | { type: "UserExists" }
+Not logged in as user 7 or user 7's friends | 403 | { type: "Unauthorized" }

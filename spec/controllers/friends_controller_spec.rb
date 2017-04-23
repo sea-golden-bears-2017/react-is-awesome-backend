@@ -30,26 +30,26 @@ describe FriendsController do
 
     describe 'FriendsController#create' do
       it 'returns a 201 status code when the friend already exists' do
-        get :create, params: { user_id: user.id, id: friend.id }
+        get :create, params: { user_id: user.id, friend: { id: friend.id } }
         expect(response.status).to be(201)
       end
     end
 
     describe 'FriendsController#destroy' do
       it 'returns a 200 status code when removing a friend' do
-        get :destroy, params: { user_id: user.id, id: friend.id }
+        delete :destroy, params: { user_id: user.id, id: friend.id }
         expect(response.status).to be(200)
       end
 
       it 'removes the friend relationship from the database' do
-        get :destroy, params: { user_id: user.id, id: friend.id }
+        delete :destroy, params: { user_id: user.id, id: friend.id }
         user.friends.reload
         expect(user.friends).not_to include(friend)
       end
 
       it 'returns a 404 status code if the friend id is invalid' do
 
-        get :destroy, params: { user_id: user.id, id: 841733 }
+        delete :destroy, params: { user_id: user.id, id: 841733 }
         expect(response.status).to be(404)
       end
     end
@@ -67,23 +67,28 @@ describe FriendsController do
 
     describe 'FriendsController#create' do
       it 'returns a 403 when trying to add a friend to user' do
-        get :create, params: {user_id: user.id, id: friend.id }
+        get :create, params: {user_id: user.id, friend: { id: friend.id } }
         expect(response.status).to be(403)
       end
 
-      it 'returns a 201 status code when adding user as a friend to friend' do
-        get :create, params: {user_id: friend.id, id: user.id }
+      it 'returns a 201 status code when adding a friend by id' do
+        get :create, params: {user_id: friend.id, friend: { id: user.id } }
+        expect(response.status).to be(201)
+      end
+
+      it 'returns a 201 when adding a friend by name' do
+        get :create, params: {user_id: friend.id, friend: { name: user.name } }
         expect(response.status).to be(201)
       end
 
       it 'adds the user to the friends list' do
-        get :create, params: {user_id: friend.id, id: user.id }
+        get :create, params: {user_id: friend.id, friend: { id: user.id } }
         friend.friends.reload
         expect(friend.has_friend?(user.id)).to be(true)
       end
 
       it 'returns a list of the current friends on success' do
-        get :create, params: {user_id: friend.id, id: user.id }
+        get :create, params: {user_id: friend.id, friend: { id: user.id } }
         expect(response.body).to include({
           id: user.id,
           name: user.name,
@@ -91,12 +96,12 @@ describe FriendsController do
       end
 
       it 'returns a 404 status code if the user id is invalid' do
-        get :create, params: {user_id: friend.id, id: 372642 }
+        get :create, params: {user_id: friend.id, friend: { id: 372642 } }
         expect(response.status).to be(404)
       end
 
       it 'returns a 400 if trying to friend oneself' do
-        get :create, params: {user_id: friend.id, id: friend.id }
+        get :create, params: {user_id: friend.id, friend: { id: friend.id } }
         expect(response.status).to be(400)
       end
     end

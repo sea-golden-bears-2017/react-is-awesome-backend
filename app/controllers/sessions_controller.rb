@@ -5,7 +5,7 @@ class SessionsController < ApplicationController
     raise Exceptions::UnauthorizedError if !user || !user.authenticate(session_params[:password])
 
     session[:user_id] = user.id
-    render json: {user_id: user.id}
+    render json: {user_id: user.id}, status: :created
   end
 
   def destroy
