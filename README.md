@@ -3,7 +3,7 @@
 ## Installation
 ```
 bundle install
-be db:setup
+be rake db:setup
 be rails s
 ```
 
