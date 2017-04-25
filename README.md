@@ -3,7 +3,7 @@
 ## Installation
 ```
 bundle install
-be db:setup
+be rake db:setup
 be rails s
 ```
 
@@ -80,7 +80,7 @@ When logging in, a cookie is created on the frontend, and that is automatically 
 
 Name | URL | Method | Auth | Description
 -----|-----|--------|------|------------
-Create | /session/ | POST | no | Logs in a user
+Create | /sessions | POST | no | Logs in a user
 
 Parameters:
 
