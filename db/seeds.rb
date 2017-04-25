@@ -13,7 +13,7 @@ publisher = Faker::Book.publisher
   Book.create(title: Faker::Book.title,
     author: author,
     publisher: publisher,
-    genre: Faker::Book.publisher)
+    genre: Faker::Book.genre)
 end
 
 10.times do
@@ -36,6 +36,6 @@ end
     user.books << Book.create(title: Faker::Book.title,
       author: author,
       publisher: publisher,
-      genre: Faker::Book.publisher)
+      genre: Faker::Book.genre)
   end
 end
