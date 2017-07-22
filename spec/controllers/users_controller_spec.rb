@@ -36,11 +36,8 @@ describe UsersController do
   end
   describe '#update' do
     let(:password) { Faker::Internet.password }
-    let(:params) { {id: user.id, user: { password: password } } }
-
-    before(:each) do
-      session[:user_id] = user.id
-    end
+    let(:token) { Authorization.encode_token(user) }
+    let(:params) { {id: user.id, user: { password: password }, token: token } }
 
     it 'updates a password in the database' do
       put :update, params: params
@@ -57,7 +54,7 @@ describe UsersController do
     end
 
     it 'returns a 403 status code if trying to update without having the password' do
-      session[:user_id] = 435235
+      params.delete(:token)
       put :update, params: params
       expect(response.status).to be(403)
     end
