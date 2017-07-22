@@ -4,11 +4,9 @@ require 'json'
 module Authorization
   def current_user
     if params[:token]
+      return unless params[:token]
       user_id = Authorization.decode_token(params[:token])
       @current_user ||= User.find_by(id: user_id)
-    else
-      return unless session[:user_id]
-      @current_user ||= User.find_by(id: session[:user_id])
     end
   end
 
