@@ -98,23 +98,6 @@ Success | 201 | { id: 7 }
 Already have a session | 400 | { type: "AlreadyLoggedIn" }
 Missing params | 400 | { type: "ParameterMissing" }
 Username or password invalid | 403 | { type: "Unauthorized" }
-
-#### Destroy
-Logs out a user (if logged in)
-This route is safe to call at any time.
-
-Name | URL | Method | Auth | Description
------|-----|--------|------|------------
-Delete | /session/ | DELETE | no | Logs out a user
-
-Parameters: None
-
-Potential responses:
-
-Type   | Status | Example
--------|--------|--------
-Success | 200 | {message: "You have been successfully logged out"}
-
 - - -
 
 ### Friend

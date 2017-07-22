@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   resources :users, except: [:new, :index, :destroy, :show]
-  resources :sessions, only: [:create, :destroy]
+  resources :sessions, only: [:create]
 
   resources :foods, except: :update
   resources :books, except: :update

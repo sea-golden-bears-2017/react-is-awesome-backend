@@ -16,7 +16,6 @@ module Exceptions
     { name: :UnauthorizedError, message: "Please log in and try again", status: 403 },
     { name: :UserExistsError, message: "This user already exists in the database, pick another name"},
     { name: :NotFoundError, status: 404 },
-    { name: :AlreadyLoggedInError, message: "Already have a session", status: 400 },
     { name: :ParameterMissingError },
     { name: :InvalidDataError },
     { name: :UnknownError, message: "An unexpected error happened on the server", status: 500 },

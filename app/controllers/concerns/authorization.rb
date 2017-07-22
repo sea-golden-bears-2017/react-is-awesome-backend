@@ -3,8 +3,13 @@ require 'json'
 
 module Authorization
   def current_user
-    return unless session[:user_id]
-    @current_user ||= User.find_by(id: session[:user_id])
+    if params[:token]
+      user_id = Authorization.decode_token(params[:token])
+      @current_user ||= User.find_by(id: user_id)
+    else
+      return unless session[:user_id]
+      @current_user ||= User.find_by(id: session[:user_id])
+    end
   end
 
   def endpoint_user
