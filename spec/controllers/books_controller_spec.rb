@@ -20,44 +20,44 @@ describe BooksController do
     let(:user) { FactoryGirl.create :user }
 
     context 'when logged in as that user' do
-      before (:each) { session[:user_id] = user.id }
+      let(:token) { Authorization.encode_token(user) }
 
       describe 'BooksController#index' do
         before (:each) { user.books << book }
         it 'responds with a 200 status code when viewing the users books' do
-          get :index, params: {user_id: user.id}
+          get :index, params: {user_id: user.id, token: token}
           expect(response.status).to be(200)
         end
 
         it 'responds with a json array of the users books' do
-          get :index, params: {user_id: user.id}
+          get :index, params: {user_id: user.id, token: token}
           expect(response.body).to include(book.to_json)
         end
       end
 
       describe 'BooksController#update' do
         it 'responds with a 200 status code when adding a book to a user' do
-          put :update, params: { user_id: user.id, id: book.id }
+          put :update, params: { user_id: user.id, id: book.id, token: token }
           expect(response.status).to be(200)
         end
 
         it 'updates the users books' do
-          put :update, params: { user_id: user.id, id: book.id }
+          put :update, params: { user_id: user.id, id: book.id, token: token }
           expect(user.books).to include(book)
         end
 
         it 'returns the users books' do
-          put :update, params: { user_id: user.id, id: book.id }
+          put :update, params: { user_id: user.id, id: book.id, token: token }
           expect(response.body).to eq (user.books.to_json)
         end
 
         it 'returns a 404 status code when the book id is invalid' do
-          put :update, params: { user_id: user.id, id: 4771717 }
+          put :update, params: { user_id: user.id, id: 4771717, token: token }
           expect(response.status).to be(404)
         end
 
         it 'returns a useful error message when the book id is invalid' do
-            put :update, params: { user_id: user.id, id: 4771717 }
+            put :update, params: { user_id: user.id, id: 4771717, token: token }
             expect(JSON.parse(response.body)["type"]).to eq("NotFound")
         end
       end
@@ -66,23 +66,23 @@ describe BooksController do
         before(:each) { user.books << book }
 
         it 'returns a 200 status when removing an association' do
-          put :destroy, params: { user_id: user.id, id: book.id }
+          put :destroy, params: { user_id: user.id, id: book.id, token: token }
           expect(response.status).to be(200)
         end
 
         it 'removes the book from the users collection' do
-          put :destroy, params: { user_id: user.id, id: book.id }
+          put :destroy, params: { user_id: user.id, id: book.id, token: token }
           user.books.reload
           expect(user.books).not_to include(book)
         end
 
         it 'returns a 404 status when the book isnt found' do
-          put :destroy, params: { user_id: user.id, id: 4771717 }
+          put :destroy, params: { user_id: user.id, id: 4771717, token: token }
           expect(response.status).to be(404)
         end
 
         it 'returns a useful error message when the book id is invalid' do
-            put :update, params: { user_id: user.id, id: 4771717 }
+            put :update, params: { user_id: user.id, id: 4771717, token: token }
             expect(JSON.parse(response.body)["type"]).to eq("NotFound")
         end
       end
