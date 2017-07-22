@@ -10,7 +10,8 @@ describe SessionsController, type: :controller do
       end
       it 'sets the session id to the id of the user' do
         post :create, params: params
-        expect(session[:user_id]).to eq(user.id)
+        parsed_response = JSON.parse(response.body)
+        expect(parsed_response["token"]).to eq(Authorization.encode_token(user))
       end
       it 'responds with the newly set session id' do
         post :create, params: params
@@ -27,22 +28,6 @@ describe SessionsController, type: :controller do
         post :create, params: params
         expect(JSON.parse(response.body)["type"]).to eq("Unauthorized")
       end
-    end
-    it 'when a user is logged in it responds with an error message stating user is currently logged in' do
-      session[:user_id] = user.id
-      post :create, params: {name: user.name, password: user.password }
-      expect(JSON.parse(response.body)["type"]).to eq("AlreadyLoggedIn")
-    end
-  end
-  describe '#destroy' do
-    before(:each) do
-      delete :destroy, params: {id: user.id}
-    end
-    it 'clears the user id from the session' do
-      expect(session[:user_id]).to be_nil
-    end
-    it 'responds with a message stating that the user has been logged out' do
-      expect(response.body).to include("You have been successfully logged out")
     end
   end
 end

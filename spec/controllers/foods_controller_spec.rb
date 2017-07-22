@@ -34,31 +34,28 @@ describe FoodsController do
 
   context 'with an unauthorized user' do
     let(:user) { FactoryGirl.create :user }
-    before (:each) do
-      session[:user_id] = user.id.to_s
-    end
+    let(:token) { Authorization.encode_token(user) }
 
     it "returns a 403 when trying to create new food" do
-      get :create, params: { name: "carrot", unit: "hectacre" }
+      get :create, params: { name: "carrot", unit: "hectacre", token: token}
       expect(response.status).to be(403)
     end
 
     it "returns a 403 when trying to destroy food" do
-      get :destroy, params: {id: food.id}
+      get :destroy, params: {id: food.id, token: token}
       expect(response.status).to be(403)
     end
   end
 
   context 'with an admin user' do
     let(:admin) { FactoryGirl.create :admin }
-    before (:each) do
-      session[:user_id] = admin.id.to_s
-    end
+    let(:token) { Authorization.encode_token(admin) }
 
     describe 'FoodsController#create' do
       let(:params) {{
         name: "carrot",
         unit: "hectacre",
+        token: token
       }}
 
       it 'returns a 201 after creating a new item' do
@@ -77,25 +74,25 @@ describe FoodsController do
       end
 
       it 'returns a 400 if the name is missing' do
-        get :create, params: { unit: 'miles' }
+        get :create, params: { unit: 'miles', token: token }
         expect(response.status).to be(400)
       end
     end
 
     describe 'FoodsController#destroy' do
       it 'returns a 200 after destroying the food item' do
-        get :destroy, params: { id: food.id }
+        get :destroy, params: { id: food.id, token: token }
         expect(response.status).to be(200)
       end
 
       it 'successfully destroys the food item' do
         id = food.id
-        get :destroy, params: { id: id }
+        get :destroy, params: { id: id, token: token }
         expect(Food.find_by(id: id)).to be_nil
       end
 
       it 'returns a 404 if the id is incorrect' do
-        get :destroy, params: { id: 48924714 }
+        get :destroy, params: { id: 48924714, token: token }
         expect(response.status).to be(404)
       end
     end

@@ -1,7 +1,13 @@
+require 'base64'
+require 'json'
+
 module Authorization
   def current_user
-    return unless session[:user_id]
-    @current_user ||= User.find_by(id: session[:user_id])
+    if params[:token]
+      return unless params[:token]
+      user_id = Authorization.decode_token(params[:token])
+      @current_user ||= User.find_by(id: user_id)
+    end
   end
 
   def endpoint_user
@@ -36,6 +42,18 @@ module Authorization
       if current_user != endpoint_user
         raise Exceptions::UnauthorizedError unless current_user.is_friend_of?(params[:user_id])
       end
+    end
+  end
+
+  def self.encode_token(user)
+    Base64.encode64({token: user.id}.to_json)
+  end
+
+  def self.decode_token(token)
+    begin
+      JSON.parse(Base64.decode64(token))['token']
+    rescue
+      nil
     end
   end
 end
