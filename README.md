@@ -56,6 +56,7 @@ Parameters:
 
 Name | Type | Required | Example
 -----|------|-----------|-------
+token|string| yes       | "dXNlcl9pZD0xMjM=\n"
 user | hash | yes         | user: { password: ... }
 user[:password] | string | yes | 'password1'
 
@@ -86,6 +87,7 @@ Parameters:
 
 Name | Type | Required | Example
 -----|------|-----------|-------
+token|string| yes       | "dXNlcl9pZD0xMjM=\n"
 user | hash | yes         | user: { name: ... }
 user[:name] | string | yes | 'the commish'
 user[:password] | string | yes | 'password1'
@@ -109,7 +111,11 @@ Name | URL | Method | Auth | Description
 -----|-----|--------|------|------------
 Index | /users/7/friends/ | GET | as user or friend of user | A list of the users's friends
 
-Parameters: None
+Parameters:
+
+Name | Type | Required | Example
+-----|------|-----------|-------
+token|string| yes       | "dXNlcl9pZD0xMjM=\n"
 
 Potential responses:
 
@@ -131,6 +137,7 @@ Note: Either the name or the id is required. If both are present, then the id is
 
 Name | Type | Required | Example
 -----|------|-----------|-------
+token|string| yes       | "dXNlcl9pZD0xMjM=\n"
 friend | hash | yes | friend: { name: ... }
 friend[:name] | string | no | 'luciana_díaz'
 friend[:id] | integer | no | 21
@@ -152,7 +159,12 @@ Name | URL | Method | Auth | Description
 -----|-----|--------|------|------------
 Destroy | /users/7/friends/21 | DELETE | as user | Removes friend 21 from user 7's friend list
 
-Parameters: None
+Parameters:
+
+
+Name | Type | Required | Example
+-----|------|-----------|-------
+token|string| yes       | "dXNlcl9pZD0xMjM=\n"
 
 Potential responses:
 
@@ -186,7 +198,11 @@ Name | URL | Method | Auth | Description
 -----|-----|--------|------|------------
 Index | users/7/books/ | GET | as user or friend of user 7 | A list of all books associated with the user
 
-Parameters: None
+Parameters:
+
+Name | Type | Required | Example
+-----|------|-----------|-------
+token|string| yes       | "dXNlcl9pZD0xMjM=\n"
 
 Potential responses:
 
@@ -222,7 +238,11 @@ Name | URL | Method | Auth | Description
 -----|-----|--------|------|------------
 Update | users/7/books/6 | PUT | as user | Adds book 6 to user 7's books
 
-Parameters: None
+Parameters:
+
+Name | Type | Required | Example
+-----|------|-----------|-------
+token|string| yes       | "dXNlcl9pZD0xMjM=\n"
 
 Potential responses:
 
@@ -239,7 +259,11 @@ Name | URL | Method | Auth | Description
 -----|-----|--------|------|------------
 Delete | /books/6 | DELETE | admin | Removes book 6 from the database
 
-Parameters: None
+Parameters:
+
+Name | Type | Required | Example
+-----|------|-----------|-------
+token|string| yes       | "dXNlcl9pZD0xMjM=\n"
 
 Potential responses:
 
@@ -255,7 +279,11 @@ Name | URL | Method | Auth | Description
 -----|-----|--------|------|------------
 Delete | users/7/books/6 | DELETE | as user | Removes book 6 from user 7's books
 
-Parameters: None
+Parameters:
+
+Name | Type | Required | Example
+-----|------|-----------|-------
+token|string| yes       | "dXNlcl9pZD0xMjM=\n"
 
 Potential responses:
 
