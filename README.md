@@ -87,7 +87,6 @@ Parameters:
 
 Name | Type | Required | Example
 -----|------|-----------|-------
-token|string| yes       | "dXNlcl9pZD0xMjM=\n"
 user | hash | yes         | user: { name: ... }
 user[:name] | string | yes | 'the commish'
 user[:password] | string | yes | 'password1'
@@ -96,8 +95,7 @@ Potential responses:
 
 Type   | Status | Example
 -------|--------|--------
-Success | 201 | { id: 7 }
-Already have a session | 400 | { type: "AlreadyLoggedIn" }
+Success | 201 | { id: 7, token: "dXNlcl9pZD0xMjM=\n" }
 Missing params | 400 | { type: "ParameterMissing" }
 Username or password invalid | 403 | { type: "Unauthorized" }
 - - -
