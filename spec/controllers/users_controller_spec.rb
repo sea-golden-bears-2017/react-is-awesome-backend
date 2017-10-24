@@ -2,8 +2,27 @@ require 'rails_helper'
 require 'faker'
 describe UsersController do
   let(:user) { FactoryGirl.create(:user) }
-  let(:user_params) {{user: {name: Faker::Name.name, password: Faker::Internet.password}}}
+
+  describe '#index' do
+    before(:each) do
+    end
+
+    it 'returns a list of all the users' do
+      get :index
+      data = JSON.parse(response.body)
+      expect(data.length).to eq(User.all.length)
+    end
+
+    it 'has only the id, name, and is_admin property for each user' do
+      get :index
+      data = JSON.parse(response.body)
+      keys = data.map { |item| item.keys }
+      expect(keys).to all(eq ['id', 'name', 'is_admin'])
+    end
+  end
+
   describe '#create' do
+    let(:user_params) {{user: {name: Faker::Name.name, password: Faker::Internet.password}}}
     it 'saves a user to the database' do
       expect{post :create, params: user_params}.to change{User.count}.by(1)
     end

@@ -26,13 +26,13 @@ end
 
 
 100.times do
-  User.create(name: Faker::Internet.unique.user_name, password: Faker::Internet.password)
+  User.create(name: Faker::Internet.unique.user_name, password: 'ham')
 end
 
 10.times do
-  user = User.create(name: Faker::Internet.unique.user_name, password: Faker::Internet.password)
+  user = User.create(name: Faker::Internet.unique.user_name, password: 'ham')
   5.times do
-    user.friends << User.create(name: Faker::Internet.unique.user_name, password: Faker::Internet.password)
+    user.friends << User.create(name: Faker::Internet.unique.user_name, password: 'ham')
     user.books << Book.create(title: Faker::Book.title,
       author: author,
       publisher: publisher,

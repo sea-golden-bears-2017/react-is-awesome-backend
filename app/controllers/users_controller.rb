@@ -1,6 +1,17 @@
 class UsersController < ApplicationController
   include Authorization
 
+  def index
+    users = User.all.map do |user|
+      {
+        'id': user.id,
+        'name': user.name,
+        'admin': user.is_admin?
+      }
+    end
+    render json: users
+  end
+
   def create
     user_params = params.require(:user).permit(:name, :password, :is_admin?).tap do |user_params|
       user_params.require([:name, :password])

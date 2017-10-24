@@ -19,6 +19,13 @@ be rails s
 
 ### User
 
+#### Index
+Name | URL | Method | Auth | Description
+-----|-----|--------|------|------------
+Index | /users/ | GET | no | A list of the users
+
+Parameters: None
+
 #### Create
 
 Notes: The name is always lower-cased on the backend side.

@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  resources :users, except: [:new, :index, :destroy, :show]
+  resources :users, except: [:new, :destroy, :show]
   resources :sessions, only: [:create]
 
   resources :foods, except: :update
