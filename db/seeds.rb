@@ -25,6 +25,10 @@ end
 end
 
 
+5.times do
+  User.create(is_admin?: true, name: 'admin_' + Faker::Internet.unique.user_name, password: 'ham')
+end
+
 100.times do
   User.create(name: Faker::Internet.unique.user_name, password: 'ham')
 end
